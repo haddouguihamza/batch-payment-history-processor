@@ -1,0 +1,17 @@
+{"properties": [
+	{
+		"name": "fileName",
+		"type": "java.lang.String",
+		"sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties"
+	}
+],"hints": [
+	{
+		"name": "spring.application.batch.resource.values",
+		"values": [
+			{
+				"value": "input",
+				"description": "CSV based resource file to read data from"
+			}
+		]
+	}
+]}
