@@ -1,5 +1,0 @@
-first line is the headline of this balance flat file of type csv
-first_client,2000,visa,50000,48000,ID102,1
-first_client,4000,visa,48000,44000,ID103,1
-first_client,1000,visa,43000,43000,ID104,1
-this line will hold the total of overall operations made wich is 3 operations

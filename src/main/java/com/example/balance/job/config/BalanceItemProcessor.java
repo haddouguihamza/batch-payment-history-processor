@@ -2,50 +2,43 @@ package com.example.balance.job.config;
 
 import java.util.Locale;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.balance.dao.InputDetailRecord;
 import com.example.balance.dao.OutputDetailRecord;
 import com.example.financial.utils.CurrencyFormatterService;
 
-
-
+/**
+ * ItemProcessor implementation for transforming InputDetailRecord to OutputDetailRecord.
+ * Instantiates OutputDetailRecord inside process() for thread safety.
+ */
 @Component
-public class BalanceItemProcessor implements ItemProcessor<InputDetailRecord, OutputDetailRecord>{
-	
-	@Autowired
-	private OutputDetailRecord output;
-	
-	@Autowired
-	private CurrencyFormatterService currencyService;
+public class BalanceItemProcessor implements ItemProcessor<InputDetailRecord, OutputDetailRecord> {
 
-	public BalanceItemProcessor() {
-		// TODO Auto-generated constructor stub
-	}
+    private final CurrencyFormatterService currencyService;
 
-	@Override
-	public OutputDetailRecord process(InputDetailRecord item) throws Exception {
-		this.output.setCard_acquirer(item.getCard_acquirer());
-		this.output.setCustomer_name(item.getClient_fullname());
-		this.output.setTransaction_amount(item.getTransaction_amount());
-		this.output.setCard_type(formatCardType(item.getCard_type()));
-		this.output.setBalance_amount(item.getBalance_amount());
-		this.output.setFictious_balance(item.getFictious_balance());
-		this.output.setReceiver_name(item.getConsumer_client());
-		this.output.setOperations_total_number(item.getNumber_of_operations());
-		return this.output;
-	}
-	
-	
-	String formatCardType(String type) {
-		return type.toUpperCase();
-	}
-	
-	
-	String formatAmount(double amount) {
-		Locale locale = Locale.forLanguageTag("en-US");    
-	    String formattedAmount= this.currencyService.formatCurrency(amount, "USD", locale);
-		return formattedAmount;
-	}
+    public BalanceItemProcessor(CurrencyFormatterService currencyService) {
+        this.currencyService = currencyService;
+    }
 
+    @Override
+    public OutputDetailRecord process(InputDetailRecord item) throws Exception {
+        OutputDetailRecord output = new OutputDetailRecord(); // Instantiate per record
+        output.setCard_acquirer(item.getAcquirer());
+        output.setCustomer_name(item.getClient());
+        output.setTransaction_amount(item.getTransaction_amount());
+        output.setCard_type(formatCardType(item.getType()));
+        output.setBalance_amount(formatAmount(item.getBalance()));
+        output.setFictious_balance(formatAmount(item.getFictious_balance()));
+        output.setReceiver_name(item.getReceiver());
+        return output;
+    }
+
+    String formatCardType(String type) {
+        return type != null ? type.toUpperCase() : null;
+    }
+
+    String formatAmount(float amount) {
+        Locale locale = Locale.forLanguageTag("en-US");
+        return currencyService.formatCurrency(amount, "USD", locale);
+    }
 }
