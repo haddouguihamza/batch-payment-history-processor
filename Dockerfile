@@ -1,6 +1,5 @@
 FROM openjdk:21-jdk-slim
 
-# Set a working directory
 WORKDIR /src
 
 COPY target/*.jar Balance-Batch-build.jar
