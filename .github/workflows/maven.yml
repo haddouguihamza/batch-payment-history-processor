@@ -25,15 +25,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - name: Setup Java 21 & cache Maven
+        uses: actions/setup-java@v3
         with:
+          distribution: temurin
           java-version: '21'
-          distribution: 'temurin'
           cache: maven
 
-      - name: Build Java package
-        run: mvn clean package -DskipTests
+      - name: Debug – repo content
+        run: |
+          ls -la
+          find . -maxdepth 2 -type f -name pom.xml
+
+      - name: Build Java package with Maven Wrapper
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests
+
+      - name: Verify target repository was successfully created
+        run: find . -type d -name target
 
       - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@v2
+        uses: advanced-security/maven-dependency-submission-action@v3
