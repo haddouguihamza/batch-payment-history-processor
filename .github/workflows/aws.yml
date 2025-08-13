@@ -32,7 +32,7 @@ on:
 
 env:
   AWS_REGION: eu-west-3
-  ECR_REPOSITORY: balance-java-batch-job-registry
+  ECR_REPOSITORY: hamzahaddouguiconsole/balance-java-batch-job-registry
   ECS_SERVICE: balance-process-ecs-service-idai8lsy
   ECS_CLUSTER: haddouguihamza-engineer-balance-cluster
   ECS_TASK_DEFINITION: balance-process-ecstasks-definintion-revision1.json
