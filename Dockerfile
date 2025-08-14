@@ -1,10 +1,8 @@
 FROM openjdk:21-jdk-slim
 
-WORKDIR /src
-
-COPY target/*.jar Balance-Batch-build.jar
+COPY target/Balance-Batch-0.0.2-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
 # Set the entrypoint to run the JAR
-ENTRYPOINT ["java", "-jar", "Balance-Batch-build.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
